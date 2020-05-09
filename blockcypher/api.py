@@ -33,13 +33,10 @@ try:
 except ImportError:  # pragma: no cover
     JSONError = ValueError
 
-
 BLOCKCYPHER_DOMAIN = 'https://api.blockcypher.com'
 ENDPOINT_VERSION = 'v1'
 
-
 TIMEOUT_IN_SECONDS = 10
-
 
 logger = logging.getLogger(__name__)
 
@@ -104,7 +101,8 @@ def _clean_block(response_dict):
     return response_dict
 
 
-def get_address_details(address, coin_symbol='btc', txn_limit=None, api_key=None, before_bh=None, after_bh=None, unspent_only=False, show_confidence=False, confirmations=0, include_script=False):
+def get_address_details(address, coin_symbol='btc', txn_limit=None, api_key=None, before_bh=None, after_bh=None,
+                        unspent_only=False, show_confidence=False, confirmations=0, include_script=False):
     '''
     Takes an address and coin_symbol and returns the address details
 
@@ -123,8 +121,8 @@ def get_address_details(address, coin_symbol='btc', txn_limit=None, api_key=None
     '''
 
     assert is_valid_address_for_coinsymbol(
-            b58_address=address,
-            coin_symbol=coin_symbol), address
+        b58_address=address,
+        coin_symbol=coin_symbol), address
     assert isinstance(show_confidence, bool), show_confidence
 
     url = make_url(coin_symbol, **dict(addrs=address))
@@ -154,16 +152,16 @@ def get_address_details(address, coin_symbol='btc', txn_limit=None, api_key=None
 
 
 def get_addresses_details(address_list, coin_symbol='btc', txn_limit=None, api_key=None,
-        before_bh=None, after_bh=None, unspent_only=False, show_confidence=False,
-        confirmations=0, include_script=False):
+                          before_bh=None, after_bh=None, unspent_only=False, show_confidence=False,
+                          confirmations=0, include_script=False):
     '''
     Batch version of get_address_details method
     '''
 
     for address in address_list:
         assert is_valid_address_for_coinsymbol(
-                b58_address=address,
-                coin_symbol=coin_symbol), address
+            b58_address=address,
+            coin_symbol=coin_symbol), address
     assert isinstance(show_confidence, bool), show_confidence
 
     kwargs = dict(addrs=';'.join([str(addr) for addr in address_list]))
@@ -193,11 +191,10 @@ def get_addresses_details(address_list, coin_symbol='btc', txn_limit=None, api_k
 
 
 def get_address_full(address, coin_symbol='btc', txn_limit=None, inout_limit=None,
-        api_key=None, before_bh=None, after_bh=None, show_confidence=False, confirmations=0):
-
+                     api_key=None, before_bh=None, after_bh=None, show_confidence=False, confirmations=0):
     assert is_valid_address_for_coinsymbol(
-            b58_address=address,
-            coin_symbol=coin_symbol), address
+        b58_address=address,
+        coin_symbol=coin_symbol), address
     assert isinstance(show_confidence, bool), show_confidence
 
     url = make_url(coin_symbol, 'addrs', **{address: 'full'})
@@ -236,8 +233,8 @@ def get_address_full(address, coin_symbol='btc', txn_limit=None, inout_limit=Non
 
 
 def get_wallet_transactions(wallet_name, api_key, coin_symbol='btc',
-        before_bh=None, after_bh=None, txn_limit=None, omit_addresses=False,
-        unspent_only=False, show_confidence=False, confirmations=0):
+                            before_bh=None, after_bh=None, txn_limit=None, omit_addresses=False,
+                            unspent_only=False, show_confidence=False, confirmations=0):
     '''
     Takes a wallet, api_key, coin_symbol and returns the wallet's details
 
@@ -290,7 +287,7 @@ def get_address_overview(address, coin_symbol='btc', api_key=None):
     '''
 
     assert is_valid_address_for_coinsymbol(b58_address=address,
-            coin_symbol=coin_symbol)
+                                           coin_symbol=coin_symbol)
 
     url = make_url(coin_symbol, 'addrs', **{address: 'balance'})
 
@@ -308,7 +305,7 @@ def get_total_balance(address, coin_symbol='btc', api_key=None):
     in satoshi.
     '''
     return get_address_overview(address=address,
-            coin_symbol=coin_symbol)['final_balance']
+                                coin_symbol=coin_symbol)['final_balance']
 
 
 def get_unconfirmed_balance(address, coin_symbol='btc', api_key=None):
@@ -317,7 +314,7 @@ def get_unconfirmed_balance(address, coin_symbol='btc', api_key=None):
     in satoshi.
     '''
     return get_address_overview(address=address,
-            coin_symbol=coin_symbol)['unconfirmed_balance']
+                                coin_symbol=coin_symbol)['unconfirmed_balance']
 
 
 def get_confirmed_balance(address, coin_symbol='btc', api_key=None):
@@ -326,7 +323,7 @@ def get_confirmed_balance(address, coin_symbol='btc', api_key=None):
     in satoshi.
     '''
     return get_address_overview(address=address,
-            coin_symbol=coin_symbol)['balance']
+                                coin_symbol=coin_symbol)['balance']
 
 
 def get_num_confirmed_transactions(address, coin_symbol='btc', api_key=None):
@@ -334,7 +331,7 @@ def get_num_confirmed_transactions(address, coin_symbol='btc', api_key=None):
     Only transactions that have made it into a block (confirmations > 0)
     '''
     return get_address_overview(address=address,
-            coin_symbol=coin_symbol)['n_tx']
+                                coin_symbol=coin_symbol)['n_tx']
 
 
 def get_num_unconfirmed_transactions(address, coin_symbol='btc', api_key=None):
@@ -342,7 +339,7 @@ def get_num_unconfirmed_transactions(address, coin_symbol='btc', api_key=None):
     Only transactions that have note made it into a block (confirmations == 0)
     '''
     return get_address_overview(address=address,
-            coin_symbol=coin_symbol)['unconfirmed_n_tx']
+                                coin_symbol=coin_symbol)['unconfirmed_n_tx']
 
 
 def get_total_num_transactions(address, coin_symbol='btc', api_key=None):
@@ -350,7 +347,7 @@ def get_total_num_transactions(address, coin_symbol='btc', api_key=None):
     All transaction, regardless if they have made it into any blocks
     '''
     return get_address_overview(address=address,
-            coin_symbol=coin_symbol)['final_n_tx']
+                                coin_symbol=coin_symbol)['final_n_tx']
 
 
 def generate_new_address(coin_symbol='btc', api_key=None):
@@ -372,10 +369,10 @@ def generate_new_address(coin_symbol='btc', api_key=None):
 
     if coin_symbol not in ('btc-testnet', 'bcy'):
         WARNING_MSG = [
-                'Generating private key details server-side.',
-                'You really should do this client-side.',
-                'See https://github.com/sbuss/bitmerchant for an example.',
-                ]
+            'Generating private key details server-side.',
+            'You really should do this client-side.',
+            'See https://github.com/sbuss/bitmerchant for an example.',
+        ]
         print(' '.join(WARNING_MSG))
 
     url = make_url(coin_symbol, 'addrs')
@@ -386,7 +383,7 @@ def generate_new_address(coin_symbol='btc', api_key=None):
 
 
 def derive_hd_address(api_key=None, wallet_name=None, num_addresses=1,
-        subchain_index=None, coin_symbol='btc'):
+                      subchain_index=None, coin_symbol='btc'):
     '''
     Returns a new address (without access to the private key) and adds it to
     your HD wallet (previously created using create_hd_wallet).
@@ -416,7 +413,7 @@ def derive_hd_address(api_key=None, wallet_name=None, num_addresses=1,
 
 
 def get_transaction_details(tx_hash, coin_symbol='btc', limit=None, tx_input_offset=None, tx_output_offset=None,
-        include_hex=False, show_confidence=False, confidence_only=False, api_key=None):
+                            include_hex=False, show_confidence=False, confidence_only=False, api_key=None):
     """
     Takes a tx_hash, coin_symbol, and limit and returns the transaction details
 
@@ -524,32 +521,32 @@ def get_num_confirmations(tx_hash, coin_symbol='btc', api_key=None):
     Answer is going to be from 0 - current_block_height.
     '''
     return get_transaction_details(tx_hash=tx_hash, coin_symbol=coin_symbol,
-            limit=1, api_key=api_key).get('confirmations')
+                                   limit=1, api_key=api_key).get('confirmations')
 
 
 def get_confidence(tx_hash, coin_symbol='btc', api_key=None):
     return get_transaction_details(tx_hash=tx_hash, coin_symbol=coin_symbol,
-            show_confidence=True, api_key=api_key).get('confidence')
+                                   show_confidence=True, api_key=api_key).get('confidence')
 
 
 def get_miner_preference(tx_hash, coin_symbol='btc', api_key=None):
     return get_transaction_details(tx_hash=tx_hash, coin_symbol=coin_symbol,
-            show_confidence=True, api_key=api_key).get('preference')
+                                   show_confidence=True, api_key=api_key).get('preference')
 
 
 def get_receive_count(tx_hash, coin_symbol='btc', api_key=None):
     return get_transaction_details(tx_hash=tx_hash, coin_symbol=coin_symbol,
-            show_confidence=True, api_key=api_key).get('receive_count')
+                                   show_confidence=True, api_key=api_key).get('receive_count')
 
 
 def get_satoshis_transacted(tx_hash, coin_symbol='btc', api_key=None):
     return get_transaction_details(tx_hash=tx_hash, coin_symbol=coin_symbol,
-            limit=1, api_key=api_key)['total']
+                                   limit=1, api_key=api_key)['total']
 
 
 def get_satoshis_in_fees(tx_hash, coin_symbol='btc', api_key=None):
     return get_transaction_details(tx_hash=tx_hash, coin_symbol=coin_symbol,
-            limit=1, api_key=api_key)['fees']
+                                   limit=1, api_key=api_key)['fees']
 
 
 def get_broadcast_transactions(coin_symbol='btc', limit=10, api_key=None):
@@ -580,16 +577,16 @@ def get_broadcast_transaction_hashes(coin_symbol='btc', api_key=None, limit=10):
     Warning, slow!
     '''
     transactions = get_broadcast_transactions(
-            coin_symbol=coin_symbol,
-            api_key=api_key,
-            limit=limit,
-            )
+        coin_symbol=coin_symbol,
+        api_key=api_key,
+        limit=limit,
+    )
 
     return [tx['hash'] for tx in transactions]
 
 
 def get_block_overview(block_representation, coin_symbol='btc', txn_limit=None,
-        txn_offset=None, api_key=None):
+                       txn_offset=None, api_key=None):
     """
     Takes a block_representation, coin_symbol and txn_limit and gets an overview
     of that block, including up to X transaction ids.
@@ -598,8 +595,8 @@ def get_block_overview(block_representation, coin_symbol='btc', txn_limit=None,
 
     assert is_valid_coin_symbol(coin_symbol)
     assert is_valid_block_representation(
-            block_representation=block_representation,
-            coin_symbol=coin_symbol)
+        block_representation=block_representation,
+        coin_symbol=coin_symbol)
 
     url = make_url(coin_symbol, **dict(blocks=block_representation))
 
@@ -625,8 +622,8 @@ def get_blocks_overview(block_representation_list, coin_symbol='btc', txn_limit=
     '''
     for block_representation in block_representation_list:
         assert is_valid_block_representation(
-                block_representation=block_representation,
-                coin_symbol=coin_symbol)
+            block_representation=block_representation,
+            coin_symbol=coin_symbol)
     assert is_valid_coin_symbol(coin_symbol)
 
     blocks = ';'.join([str(x) for x in block_representation_list])
@@ -650,7 +647,7 @@ def get_merkle_root(block_representation, coin_symbol='btc', api_key=None):
     Takes a block_representation and returns the merkle root
     '''
     return get_block_overview(block_representation=block_representation,
-            coin_symbol=coin_symbol, txn_limit=1, api_key=api_key)['mrkl_root']
+                              coin_symbol=coin_symbol, txn_limit=1, api_key=api_key)['mrkl_root']
 
 
 def get_bits(block_representation, coin_symbol='btc', api_key=None):
@@ -658,7 +655,7 @@ def get_bits(block_representation, coin_symbol='btc', api_key=None):
     Takes a block_representation and returns the number of bits
     '''
     return get_block_overview(block_representation=block_representation,
-            coin_symbol=coin_symbol, txn_limit=1, api_key=api_key)['bits']
+                              coin_symbol=coin_symbol, txn_limit=1, api_key=api_key)['bits']
 
 
 def get_nonce(block_representation, coin_symbol='btc', api_key=None):
@@ -666,7 +663,7 @@ def get_nonce(block_representation, coin_symbol='btc', api_key=None):
     Takes a block_representation and returns the nonce
     '''
     return get_block_overview(block_representation=block_representation,
-            coin_symbol=coin_symbol, txn_limit=1, api_key=api_key)['bits']
+                              coin_symbol=coin_symbol, txn_limit=1, api_key=api_key)['bits']
 
 
 def get_prev_block_hash(block_representation, coin_symbol='btc', api_key=None):
@@ -674,7 +671,7 @@ def get_prev_block_hash(block_representation, coin_symbol='btc', api_key=None):
     Takes a block_representation and returns the previous block hash
     '''
     return get_block_overview(block_representation=block_representation,
-            coin_symbol=coin_symbol, txn_limit=1, api_key=api_key)['prev_block']
+                              coin_symbol=coin_symbol, txn_limit=1, api_key=api_key)['prev_block']
 
 
 def get_block_hash(block_height, coin_symbol='btc', api_key=None):
@@ -682,7 +679,7 @@ def get_block_hash(block_height, coin_symbol='btc', api_key=None):
     Takes a block_height and returns the block_hash
     '''
     return get_block_overview(block_representation=block_height,
-            coin_symbol=coin_symbol, txn_limit=1, api_key=api_key)['hash']
+                              coin_symbol=coin_symbol, txn_limit=1, api_key=api_key)['hash']
 
 
 def get_block_height(block_hash, coin_symbol='btc', api_key=None):
@@ -690,11 +687,11 @@ def get_block_height(block_hash, coin_symbol='btc', api_key=None):
     Takes a block_hash and returns the block_height
     '''
     return get_block_overview(block_representation=block_hash,
-            coin_symbol=coin_symbol, txn_limit=1, api_key=api_key)['height']
+                              coin_symbol=coin_symbol, txn_limit=1, api_key=api_key)['height']
 
 
 def get_block_details(block_representation, coin_symbol='btc', txn_limit=None,
-        txn_offset=None, in_out_limit=None, api_key=None):
+                      txn_offset=None, in_out_limit=None, api_key=None):
     """
     Takes a block_representation, coin_symbol and txn_limit and
     1) Gets the block overview
@@ -708,12 +705,12 @@ def get_block_details(block_representation, coin_symbol='btc', txn_limit=None,
     assert is_valid_coin_symbol(coin_symbol)
 
     block_overview = get_block_overview(
-            block_representation=block_representation,
-            coin_symbol=coin_symbol,
-            txn_limit=txn_limit,
-            txn_offset=txn_offset,
-            api_key=api_key,
-            )
+        block_representation=block_representation,
+        coin_symbol=coin_symbol,
+        txn_limit=txn_limit,
+        txn_offset=txn_offset,
+        api_key=api_key,
+    )
 
     if 'error' in block_overview:
         return block_overview
@@ -721,11 +718,11 @@ def get_block_details(block_representation, coin_symbol='btc', txn_limit=None,
     txids_to_lookup = block_overview['txids']
 
     txs_details = get_transactions_details(
-            tx_hash_list=txids_to_lookup,
-            coin_symbol=coin_symbol,
-            limit=in_out_limit,
-            api_key=api_key,
-            )
+        tx_hash_list=txids_to_lookup,
+        coin_symbol=coin_symbol,
+        limit=in_out_limit,
+        api_key=api_key,
+    )
 
     if 'error' in txs_details:
         return txs_details
@@ -737,9 +734,9 @@ def get_block_details(block_representation, coin_symbol='btc', txn_limit=None,
 
     # sort results using comparator dict
     block_overview['txids'] = sorted(
-            txs_details,
-            key=lambda k: txids_comparator_dict.get(k.get('hash'), 9999),  # anything that fails goes last
-            )
+        txs_details,
+        key=lambda k: txids_comparator_dict.get(k.get('hash'), 9999),  # anything that fails goes last
+    )
 
     return block_overview
 
@@ -767,7 +764,7 @@ def get_latest_block_height(coin_symbol='btc', api_key=None):
     '''
 
     return get_blockchain_overview(coin_symbol=coin_symbol,
-            api_key=api_key)['height']
+                                   api_key=api_key)['height']
 
 
 def get_latest_block_hash(coin_symbol='btc', api_key=None):
@@ -776,7 +773,7 @@ def get_latest_block_hash(coin_symbol='btc', api_key=None):
     '''
 
     return get_blockchain_overview(coin_symbol=coin_symbol,
-            api_key=api_key)['hash']
+                                   api_key=api_key)['hash']
 
 
 def get_blockchain_fee_estimates(coin_symbol='btc', api_key=None):
@@ -785,10 +782,10 @@ def get_blockchain_fee_estimates(coin_symbol='btc', api_key=None):
     """
     overview = get_blockchain_overview(coin_symbol=coin_symbol, api_key=api_key)
     return {
-            'high_fee_per_kb': overview['high_fee_per_kb'],
-            'medium_fee_per_kb': overview['medium_fee_per_kb'],
-            'low_fee_per_kb': overview['low_fee_per_kb'],
-            }
+        'high_fee_per_kb': overview['high_fee_per_kb'],
+        'medium_fee_per_kb': overview['medium_fee_per_kb'],
+        'low_fee_per_kb': overview['low_fee_per_kb'],
+    }
 
 
 def get_blockchain_high_fee(coin_symbol='btc', api_key=None):
@@ -836,8 +833,8 @@ def get_forwarding_address_details(destination_address, api_key, callback_url=No
 
     params = {'token': api_key}
     data = {
-            'destination': destination_address,
-            }
+        'destination': destination_address,
+    }
 
     if callback_url:
         data['callback_url'] = callback_url
@@ -857,11 +854,11 @@ def get_forwarding_address(destination_address, api_key, callback_url=None, coin
     assert api_key, 'api_key required'
 
     resp_dict = get_forwarding_address_details(
-            destination_address=destination_address,
-            api_key=api_key,
-            callback_url=callback_url,
-            coin_symbol=coin_symbol
-            )
+        destination_address=destination_address,
+        api_key=api_key,
+        callback_url=callback_url,
+        coin_symbol=coin_symbol
+    )
 
     return resp_dict['input_address']
 
@@ -909,7 +906,8 @@ def delete_forwarding_address(payment_id, coin_symbol='btc', api_key=None):
     return get_valid_json(r, allow_204=True)
 
 
-def subscribe_to_address_webhook(callback_url, subscription_address, event='tx-confirmation', confirmations=0, confidence=0.00, coin_symbol='btc', api_key=None):
+def subscribe_to_address_webhook(callback_url, subscription_address, event='tx-confirmation', confirmations=0,
+                                 confidence=0.00, coin_symbol='btc', api_key=None):
     '''
     Subscribe to transaction webhooks on a given address.
     Webhooks for transaction broadcast and each confirmation (up to 6).
@@ -940,7 +938,7 @@ def subscribe_to_address_webhook(callback_url, subscription_address, event='tx-c
 
 
 def subscribe_to_wallet_webhook(callback_url, wallet_name,
-        event='tx-confirmation', coin_symbol='btc', api_key=None):
+                                event='tx-confirmation', coin_symbol='btc', api_key=None):
     '''
     Subscribe to transaction webhooks on a given address.
     Webhooks for transaction broadcast and each confirmation (up to 6).
@@ -1019,9 +1017,9 @@ def send_faucet_coins(address_to_fund, satoshis, api_key, coin_symbol='bcy'):
     url = make_url(coin_symbol, 'faucet')
 
     data = {
-            'address': address_to_fund,
-            'amount': satoshis,
-            }
+        'address': address_to_fund,
+        'amount': satoshis,
+    }
     params = {'token': api_key}
 
     r = requests.post(url, json=data, params=params, verify=True, timeout=TIMEOUT_IN_SECONDS)
@@ -1029,14 +1027,13 @@ def send_faucet_coins(address_to_fund, satoshis, api_key, coin_symbol='bcy'):
 
 
 def _get_websocket_url(coin_symbol):
-
     assert is_valid_coin_symbol(coin_symbol)
 
     return 'wss://socket.blockcypher.com/%s/%s/%s' % (
-            ENDPOINT_VERSION,
-            COIN_SYMBOL_MAPPINGS[coin_symbol]['blockcypher_code'],
-            COIN_SYMBOL_MAPPINGS[coin_symbol]['blockcypher_network'],
-            )
+        ENDPOINT_VERSION,
+        COIN_SYMBOL_MAPPINGS[coin_symbol]['blockcypher_code'],
+        COIN_SYMBOL_MAPPINGS[coin_symbol]['blockcypher_network'],
+    )
 
 
 def _get_pushtx_url(coin_symbol='btc'):
@@ -1116,9 +1113,9 @@ def create_wallet_from_address(wallet_name, address, api_key, coin_symbol='btc')
     assert is_valid_wallet_name(wallet_name), wallet_name
 
     data = {
-            'name': wallet_name,
-            'addresses': [address, ],
-            }
+        'name': wallet_name,
+        'addresses': [address, ],
+    }
     params = {'token': api_key}
 
     url = make_url(coin_symbol, 'wallets')
@@ -1139,9 +1136,9 @@ def create_hd_wallet(wallet_name, xpubkey, api_key, subchain_indices=[], coin_sy
     assert len(wallet_name) <= 25, wallet_name
 
     data = {
-            'name': wallet_name,
-            'extended_public_key': xpubkey,
-            }
+        'name': wallet_name,
+        'extended_public_key': xpubkey,
+    }
     params = {'token': api_key}
 
     if subchain_indices:
@@ -1154,7 +1151,7 @@ def create_hd_wallet(wallet_name, xpubkey, api_key, subchain_indices=[], coin_sy
 
 
 def get_wallet_addresses(wallet_name, api_key, is_hd_wallet=False,
-        zero_balance=None, used=None, omit_addresses=False, coin_symbol='btc'):
+                         zero_balance=None, used=None, omit_addresses=False, coin_symbol='btc'):
     '''
     Returns a list of wallet addresses as well as some meta-data
     '''
@@ -1227,9 +1224,9 @@ def get_latest_paths_from_hd_wallet_addresses(wallet_addresses):
             latest_path = chain['chain_addresses'][-1].get('path')
 
         latest_path_dict = {
-                'latest_path': latest_path,
-                'latest_address': latest_address,
-                }
+            'latest_path': latest_path,
+            'latest_address': latest_address,
+        }
 
         if 'index' in chain:
             index = chain['index']
@@ -1285,29 +1282,29 @@ def delete_wallet(wallet_name, api_key, is_hd_wallet=False, coin_symbol='btc'):
 
 
 def generate_multisig_address(pubkey_list, script_type='multisig-2-of-3', coin_symbol='btc', api_key=None):
-
     assert api_key, 'api_key required'
 
     for pubkey in pubkey_list:
         assert uses_only_hash_chars(pubkey), pubkey
 
     err_msg = '%s incompatible with %s' % (script_type, pubkey_list)
-    assert(len(pubkey_list) == int(script_type[-1])), err_msg
+    assert (len(pubkey_list) == int(script_type[-1])), err_msg
 
     url = make_url(coin_symbol, 'addrs')
     params = {'token': api_key}
     data = {
         'pubkeys': pubkey_list,
         'script_type': script_type,
-            }
+    }
 
     r = requests.post(url, json=data, params=params, verify=True, timeout=TIMEOUT_IN_SECONDS)
     return get_valid_json(r)
 
 
 def create_unsigned_tx(inputs, outputs, change_address=None,
-        include_tosigntx=False, verify_tosigntx=False, min_confirmations=0,
-        preference='high', coin_symbol='btc', api_key=None):
+                       include_tosigntx=False, verify_tosigntx=False, min_confirmations=0,
+                       preference='low', coin_symbol='btc', api_key=None,
+                       fees=None):
     '''
     Create a new transaction to sign. Doesn't ask for or involve private keys.
     Behind the scenes, blockcypher will:
@@ -1351,12 +1348,12 @@ def create_unsigned_tx(inputs, outputs, change_address=None,
         if 'address' in input_obj:
             address = input_obj['address']
             assert is_valid_address_for_coinsymbol(
-                    b58_address=address,
-                    coin_symbol=coin_symbol,
-                    ), address
+                b58_address=address,
+                coin_symbol=coin_symbol,
+            ), address
             inputs_cleaned.append({
                 'addresses': [address, ],
-                })
+            })
         elif 'pubkeys' in input_obj and input_obj.get('script_type', '').startswith('multisig-'):
             for pubkey in input_obj['pubkeys']:
                 # TODO: better pubkey test
@@ -1364,7 +1361,7 @@ def create_unsigned_tx(inputs, outputs, change_address=None,
             inputs_cleaned.append({
                 'addresses': input_obj['pubkeys'],
                 'script_type': input_obj['script_type'],
-                })
+            })
         elif 'wallet_name' in input_obj and 'wallet_token' in input_obj:
             # good behavior
             inputs_cleaned.append(input_obj)
@@ -1403,7 +1400,7 @@ def create_unsigned_tx(inputs, outputs, change_address=None,
             assert 'address' in output, output
             assert is_valid_address_for_coinsymbol(b58_address=output['address'],
                                                    coin_symbol=coin_symbol,
-                                                  )
+                                                   )
             clean_output['addresses'] = [output['address']]
         outputs_cleaned.append(clean_output)
 
@@ -1416,11 +1413,12 @@ def create_unsigned_tx(inputs, outputs, change_address=None,
     # Beginning of method code
     url = make_url(coin_symbol, **dict(txs='new'))
 
-    data = {
-        'inputs': inputs_cleaned,
-        'outputs': outputs_cleaned,
-        'preference': preference,
-    }
+    data = dict(
+        inputs=inputs,
+        outputs=outputs,
+        preference=preference,
+        fees=fees,
+    )
     if min_confirmations:
         data['confirmations'] = min_confirmations
     if change_address:
@@ -1450,7 +1448,7 @@ def create_unsigned_tx(inputs, outputs, change_address=None,
             sweep_funds=sweep_funds,
             change_address=change_address,
             coin_symbol=coin_symbol,
-            )
+        )
         if not tx_is_correct:
             print(unsigned_tx)  # for debug
             raise Exception('TX Verification Error: %s' % err_msg)
@@ -1527,7 +1525,7 @@ def verify_unsigned_tx(unsigned_tx, outputs, inputs=None, sweep_funds=False,
         if txn_outputs_response_dict != user_outputs:
             # TODO: more helpful error message
             err_msg = 'API Response Ouputs != Supplied Outputs\n\n%s\n\n%s' % (
-                    txn_outputs_response_dict, user_outputs)
+                txn_outputs_response_dict, user_outputs)
             return False, err_msg
 
     return True, ''
@@ -1578,7 +1576,7 @@ def make_tx_signatures(txs_to_sign, privkey_list, pubkey_list):
             sig,
             tx_to_sign,
             pubkey_list[cnt],
-            )
+        )
         assert ecdsa_raw_verify(tx_to_sign, der_decode_sig(sig), pubkey_list[cnt]), err_msg
         signatures.append(sig)
     return signatures
@@ -1610,7 +1608,8 @@ def broadcast_signed_transaction(unsigned_tx, signatures, pubkeys, coin_symbol='
 
 
 def simple_spend(from_privkey, to_address, to_satoshis, change_address=None,
-        privkey_is_compressed=True, min_confirmations=0, api_key=None, coin_symbol='btc'):
+                 privkey_is_compressed=True, min_confirmations=0, api_key=None,
+                 coin_symbol='btc', fees=None, preference='low'):
     '''
     Simple method to spend from one single-key address to another.
 
@@ -1640,7 +1639,7 @@ def simple_spend(from_privkey, to_address, to_satoshis, change_address=None,
         pubkey=from_pubkey,
         # this method only supports paying from pubkey anyway
         magicbyte=COIN_SYMBOL_MAPPINGS[coin_symbol]['vbyte_pubkey'],
-        )
+    )
 
     inputs = [{'address': from_address}, ]
     logger.info('inputs: %s' % inputs)
@@ -1659,7 +1658,9 @@ def simple_spend(from_privkey, to_address, to_satoshis, change_address=None,
         verify_tosigntx=False,  # will verify in next step
         include_tosigntx=True,
         api_key=api_key,
-        )
+        fees=fees,
+        preference=preference,
+    )
     logger.info('unsigned_tx: %s' % unsigned_tx)
 
     if 'errors' in unsigned_tx:
@@ -1681,7 +1682,7 @@ def simple_spend(from_privkey, to_address, to_satoshis, change_address=None,
         sweep_funds=bool(to_satoshis == -1),
         change_address=change_address_to_use,
         coin_symbol=coin_symbol,
-        )
+    )
     if not tx_is_correct:
         print(unsigned_tx)  # for debug
         raise Exception('TX Verification Error: %s' % err_msg)
@@ -1700,7 +1701,7 @@ def simple_spend(from_privkey, to_address, to_satoshis, change_address=None,
         txs_to_sign=unsigned_tx['tosign'],
         privkey_list=privkey_list,
         pubkey_list=pubkey_list,
-        )
+    )
     logger.info('tx_signatures: %s' % tx_signatures)
 
     # broadcast TX
@@ -1724,7 +1725,7 @@ def simple_spend(from_privkey, to_address, to_satoshis, change_address=None,
 
 
 def simple_spend_p2sh(all_from_pubkeys, from_privkeys_to_use, to_address, to_satoshis,
-        change_address=None, min_confirmations=0, api_key=None, coin_symbol='btc'):
+                      change_address=None, min_confirmations=0, api_key=None, coin_symbol='btc'):
     '''
     Simple method to spend from a p2sh address.
 
@@ -1770,15 +1771,15 @@ def simple_spend_p2sh(all_from_pubkeys, from_privkeys_to_use, to_address, to_sat
         assert from_pubkey in all_from_pubkeys
 
     script_type = 'multisig-%s-of-%s' % (
-            len(from_privkeys_to_use),
-            len(all_from_pubkeys),
-            )
+        len(from_privkeys_to_use),
+        len(all_from_pubkeys),
+    )
     inputs = [
-            {
-                'pubkeys': all_from_pubkeys,
-                'script_type': script_type,
-                },
-            ]
+        {
+            'pubkeys': all_from_pubkeys,
+            'script_type': script_type,
+        },
+    ]
     logger.info('inputs: %s' % inputs)
     outputs = [{'address': to_address, 'value': to_satoshis}, ]
     logger.info('outputs: %s' % outputs)
@@ -1795,7 +1796,7 @@ def simple_spend_p2sh(all_from_pubkeys, from_privkeys_to_use, to_address, to_sat
         verify_tosigntx=False,  # will verify in next step
         include_tosigntx=True,
         api_key=api_key,
-        )
+    )
     logger.info('unsigned_tx: %s' % unsigned_tx)
 
     if 'errors' in unsigned_tx:
@@ -1806,13 +1807,13 @@ def simple_spend_p2sh(all_from_pubkeys, from_privkeys_to_use, to_address, to_sat
         raise Exception('Build Unsigned TX Error')
 
     tx_is_correct, err_msg = verify_unsigned_tx(
-            unsigned_tx=unsigned_tx,
-            inputs=None,
-            outputs=outputs,
-            sweep_funds=bool(to_satoshis == -1),
-            change_address=change_address,
-            coin_symbol=coin_symbol,
-            )
+        unsigned_tx=unsigned_tx,
+        inputs=None,
+        outputs=outputs,
+        sweep_funds=bool(to_satoshis == -1),
+        change_address=change_address,
+        coin_symbol=coin_symbol,
+    )
     if not tx_is_correct:
         print(unsigned_tx)  # for debug
         raise Exception('TX Verification Error: %s' % err_msg)
@@ -1822,9 +1823,9 @@ def simple_spend_p2sh(all_from_pubkeys, from_privkeys_to_use, to_address, to_sat
 
         # confirm that the input matches the all_from_pubkeys
         err_msg = 'Invalid input: %s != %s' % (
-                proposed_input['addresses'],
-                all_from_pubkeys,
-                )
+            proposed_input['addresses'],
+            all_from_pubkeys,
+        )
         assert set(proposed_input['addresses']) == set(all_from_pubkeys), err_msg
 
         # build items to pass to make_tx_signatures
@@ -1838,19 +1839,19 @@ def simple_spend_p2sh(all_from_pubkeys, from_privkeys_to_use, to_address, to_sat
 
     # sign locally
     tx_signatures = make_tx_signatures(
-            txs_to_sign=txs_to_sign,
-            privkey_list=privkey_list,
-            pubkey_list=pubkey_list,
-            )
+        txs_to_sign=txs_to_sign,
+        privkey_list=privkey_list,
+        pubkey_list=pubkey_list,
+    )
     logger.info('tx_signatures: %s' % tx_signatures)
 
     # broadcast TX
     broadcasted_tx = broadcast_signed_transaction(
-            unsigned_tx=unsigned_tx,
-            signatures=tx_signatures,
-            pubkeys=pubkey_list,
-            coin_symbol=coin_symbol,
-            api_key=api_key,
+        unsigned_tx=unsigned_tx,
+        signatures=tx_signatures,
+        pubkeys=pubkey_list,
+        coin_symbol=coin_symbol,
+        api_key=api_key,
     )
     logger.info('broadcasted_tx: %s' % broadcasted_tx)
 
@@ -1910,8 +1911,8 @@ def get_valid_metadata_identifier(coin_symbol, address, tx_hash, block_hash):
 
     if address:
         assert is_valid_address_for_coinsymbol(
-                b58_address=address,
-                coin_symbol=coin_symbol), address
+            b58_address=address,
+            coin_symbol=coin_symbol), address
         return dict(addrs=address)
     elif tx_hash:
         assert is_valid_hash(tx_hash), tx_hash
@@ -1919,8 +1920,8 @@ def get_valid_metadata_identifier(coin_symbol, address, tx_hash, block_hash):
 
     elif block_hash:
         assert is_valid_block_representation(
-                block_representation=block_hash,
-                coin_symbol=coin_symbol)
+            block_representation=block_hash,
+            coin_symbol=coin_symbol)
         return dict(blocks=block_hash)
     else:
         raise Exception('Logic Fail: This Should Not Be Possible')
@@ -1940,7 +1941,7 @@ def get_metadata(address=None, tx_hash=None, block_hash=None, api_key=None, priv
         address=address,
         tx_hash=tx_hash,
         block_hash=block_hash,
-        )
+    )
 
     url = make_url(coin_symbol, meta=True, **kwarg)
 
@@ -1952,7 +1953,8 @@ def get_metadata(address=None, tx_hash=None, block_hash=None, api_key=None, priv
     return response_dict
 
 
-def put_metadata(metadata_dict, address=None, tx_hash=None, block_hash=None, api_key=None, private=True, coin_symbol='btc'):
+def put_metadata(metadata_dict, address=None, tx_hash=None, block_hash=None, api_key=None, private=True,
+                 coin_symbol='btc'):
     '''
     Embed metadata using blockcypher's API.
 
@@ -1968,7 +1970,7 @@ def put_metadata(metadata_dict, address=None, tx_hash=None, block_hash=None, api
         address=address,
         tx_hash=tx_hash,
         block_hash=block_hash,
-        )
+    )
 
     url = make_url(coin_symbol, meta=True, **kwarg)
 
@@ -1992,7 +1994,7 @@ def delete_metadata(address=None, tx_hash=None, block_hash=None, api_key=None, c
         address=address,
         tx_hash=tx_hash,
         block_hash=block_hash,
-        )
+    )
 
     url = make_url(coin_symbol, meta=True, **kwarg)
 
